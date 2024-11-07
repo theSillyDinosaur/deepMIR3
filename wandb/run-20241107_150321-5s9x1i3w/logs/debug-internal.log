@@ -1,0 +1,16 @@
+{"time":"2024-11-07T15:03:21.248369+08:00","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-07T15:03:21.24846+08:00","level":"INFO","msg":"created symlink","path":"/Users/franshsie/Desktop/DeepMIR3/wandb/run-20241107_150321-5s9x1i3w/logs/debug-core.log"}
+{"time":"2024-11-07T15:03:21.359702+08:00","level":"INFO","msg":"created new stream","id":"5s9x1i3w"}
+{"time":"2024-11-07T15:03:21.359739+08:00","level":"INFO","msg":"stream: started","id":"5s9x1i3w"}
+{"time":"2024-11-07T15:03:21.359798+08:00","level":"INFO","msg":"sender: started","stream_id":"5s9x1i3w"}
+{"time":"2024-11-07T15:03:21.359797+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"5s9x1i3w"}}
+{"time":"2024-11-07T15:03:21.359769+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"5s9x1i3w"}}
+{"time":"2024-11-07T15:03:21.723119+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-07T15:03:39.894952+08:00","level":"INFO","msg":"stream: closing","id":"5s9x1i3w"}
+{"time":"2024-11-07T15:03:39.895128+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-07T15:03:39.895803+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-07T15:03:43.429354+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-07T15:03:43.704275+08:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"5s9x1i3w"}}
+{"time":"2024-11-07T15:03:43.704294+08:00","level":"INFO","msg":"sender: closed","stream_id":"5s9x1i3w"}
+{"time":"2024-11-07T15:03:43.704287+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"5s9x1i3w"}}
+{"time":"2024-11-07T15:03:43.704457+08:00","level":"INFO","msg":"stream: closed","id":"5s9x1i3w"}
