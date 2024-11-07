@@ -25,7 +25,7 @@ parser.add_argument("--n_epoch", type=int, default=3)
 parser.add_argument("--batch_size", type=int, default=4)
 args = parser.parse_args()
 
-model = get_Model(args.model).to("mps")
+model = get_Model(args.model)
 dataset = prepare_REMI(glob.glob(os.path.join(args.pop1k7, 'midi_analyzed/src_*/*.mid')))
 
 training_args = TrainingArguments(
