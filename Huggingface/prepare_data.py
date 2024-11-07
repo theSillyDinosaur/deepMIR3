@@ -8,37 +8,41 @@ import torch
 import json
 
 
-def prepare_REMI(data_list, need_attnMask=False):
-    tokenizer = REMI()
+def prepare_REMI(data_list, need_attnMask=False, from_scratch=False, upload=False):
+    if(from_scratch):
+        tokenizer = REMI()
 
-    dataset = DatasetMIDI(
-        files_paths=data_list,
-        tokenizer=tokenizer,
-        max_seq_len=32768,
-        bos_token_id=tokenizer["BOS_None"],
-        eos_token_id=tokenizer["EOS_None"],
-    )
+        dataset = DatasetMIDI(
+            files_paths=data_list,
+            tokenizer=tokenizer,
+            max_seq_len=32768,
+            bos_token_id=tokenizer["BOS_None"],
+            eos_token_id=tokenizer["EOS_None"],
+        )
 
-    data = {"input_ids": [], "labels": []}
-    if need_attnMask:
-        data["attention_mask"] = []
-    max_bar = 0
-    pbar = tqdm(dataset)
-    for song in pbar:  # iterate through each tokenized song
-        tokens = song["input_ids"]
-        bar_index = torch.cat((torch.asarray([0]), (tokens == 4).nonzero().squeeze(1)), dim=0)
-        index_i = 0
-        while(bar_index[index_i]+1024 < tokens.shape[0]):
-            data["input_ids"].append(tokens[bar_index[index_i]:bar_index[index_i]+1024])
-            data["labels"].append(tokens[bar_index[index_i]+1:bar_index[index_i]+1025])
-            if need_attnMask:
-                data["attention_mask"].append(torch.asarray(1024*[1]))
-            index_i += 1
+        data = {"input_ids": [], "labels": []}
+        if need_attnMask:
+            data["attention_mask"] = []
+        pbar = tqdm(dataset)
+        for song in pbar:  # iterate through each tokenized song
+            tokens = song["input_ids"]
+            index_i = 0
+            while(index_i+1024 < tokens.shape[0]):
+                data["input_ids"].append(tokens[index_i:index_i+1024])
+                data["labels"].append(tokens[index_i+1:index_i+1025])
+                if need_attnMask:
+                    data["attention_mask"].append(torch.asarray(1024*[1]))
+                index_i += 32
 
-    # Convert to Hugging Face Dataset
-    hf_dataset = Dataset.from_dict(data)
-    split_dataset = hf_dataset.train_test_split(test_size=0.2, seed=42)
+        # Convert to Hugging Face Dataset
+        hf_dataset = Dataset.from_dict(data)
+        split_dataset = hf_dataset.train_test_split(test_size=0.2, seed=42)
+        if upload:
+            split_dataset.save_to_disk("Pop1K7_REMI")
+    
+    
+
     return split_dataset
 
 if __name__ == "__main__":
-    prepare_REMI(glob.glob('Pop1K7/midi_analyzed/src_*/*.mid'), need_attnMask=True)
+    prepare_REMI(glob.glob('Pop1K7/midi_analyzed/src_*/*.mid'), need_attnMask=True, from_scratch=True, upload=True)

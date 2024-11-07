@@ -2,6 +2,7 @@ from transformers import GPT2Config, GPT2LMHeadModel
 from transformers import TransfoXLConfig, TransfoXLLMHeadModel
 from transformers import Trainer, TrainingArguments
 import torch
+from datasets import load_dataset
 from prepare_data import prepare_REMI
 import glob
 import argparse
@@ -19,14 +20,14 @@ def get_Model(name):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", type=str, choices=["GPT2, TransfoXL"], default='GPT2')
-parser.add_argument("--pop1k7", type=str, default='Pop1K7')
+parser.add_argument("--pop1k7", type=str, default='Pop1K7_REMI')
 parser.add_argument("--ckpt", type=str, default='result')
 parser.add_argument("--n_epoch", type=int, default=3)
 parser.add_argument("--batch_size", type=int, default=4)
 args = parser.parse_args()
 
 model = get_Model(args.model)
-dataset = prepare_REMI(glob.glob(os.path.join(args.pop1k7, 'midi_analyzed/src_*/*.mid')))
+dataset = load_dataset(args.pop1k7)
 
 training_args = TrainingArguments(
     output_dir=args.ckpt,
