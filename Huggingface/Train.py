@@ -2,7 +2,7 @@ from transformers import GPT2Config, GPT2LMHeadModel
 from transformers import TransfoXLConfig, TransfoXLLMHeadModel
 from transformers import Trainer, TrainingArguments
 import torch
-from datasets import load_dataset
+from datasets import load_from_disk
 from prepare_data import prepare_REMI
 import glob
 import argparse
@@ -27,7 +27,7 @@ parser.add_argument("--batch_size", type=int, default=4)
 args = parser.parse_args()
 
 model = get_Model(args.model)
-dataset = load_dataset(args.pop1k7)
+dataset = load_from_disk(args.pop1k7)
 
 training_args = TrainingArguments(
     output_dir=args.ckpt,

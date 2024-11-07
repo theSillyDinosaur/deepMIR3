@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import load_from_disk
 import glob
 from miditok import REMI
 from miditok.pytorch_data import DatasetMIDI
@@ -32,13 +32,12 @@ def prepare_REMI(data_list, need_attnMask=False, from_scratch=False, upload=Fals
                 data["labels"].append(tokens[index_i+1:index_i+1025])
                 if need_attnMask:
                     data["attention_mask"].append(torch.asarray(1024*[1]))
-                index_i += 32
+                index_i += 512
 
         # Convert to Hugging Face Dataset
         hf_dataset = Dataset.from_dict(data)
         split_dataset = hf_dataset.train_test_split(test_size=0.2, seed=42)
-        if upload:
-            split_dataset.save_to_disk("Pop1K7_REMI")
+        split_dataset.save_to_disk("Pop1K7_REMI")
     
     
 
@@ -46,3 +45,6 @@ def prepare_REMI(data_list, need_attnMask=False, from_scratch=False, upload=Fals
 
 if __name__ == "__main__":
     prepare_REMI(glob.glob('Pop1K7/midi_analyzed/src_*/*.mid'), need_attnMask=True, from_scratch=True, upload=True)
+
+    split_dataset = load_from_disk("Pop1K7_REMI")
+    print(split_dataset)
