@@ -27,6 +27,7 @@ parser.add_argument("--pop1k7", type=str, default='Pop1K7_REMI')
 parser.add_argument("--ckpt", type=str, default='result')
 parser.add_argument("--n_epoch", type=int, default=3)
 parser.add_argument("--batch_size", type=int, default=4)
+parser.add_argument("--resume", action="store_true")
 args = parser.parse_args()
 
 model = get_Model(args.model)
@@ -51,4 +52,4 @@ trainer = Trainer(
 
 print("start training!")
 
-trainer.train()
+trainer.train(resume_from_checkpoint=args.resume)
