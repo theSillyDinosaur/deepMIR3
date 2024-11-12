@@ -33,6 +33,7 @@ def prepare_REMI(data_list, need_attnMask=False, from_scratch=False, upload=Fals
                 if need_attnMask:
                     data["attention_mask"].append(torch.asarray(1024*[1]))
                 index_i += 512
+            print(tokens[0:128])
 
         # Convert to Hugging Face Dataset
         hf_dataset = Dataset.from_dict(data)
