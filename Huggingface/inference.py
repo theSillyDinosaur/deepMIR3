@@ -80,11 +80,12 @@ else:
     tokens_set = [torch.asarray([1, 4])]
     print("Now reset")
 
-for prompt_idx, tokens in enumerate(tokens_set):
+for prompt_idx, prompt_tokens in enumerate(tokens_set):
     if os.path.isdir(os.path.join(args.output, str(prompt_idx))) == False:
         os.makedirs(os.path.join(args.output, str(prompt_idx)))
     h4_total = 0
     gs_total = 0
+    tokens = prompt_tokens
     for sample_idx in range(args.sample):
         bar_count = 0
         event_count = 2
@@ -92,7 +93,7 @@ for prompt_idx, tokens in enumerate(tokens_set):
         pbar = tqdm()
         pbar.set_description(f"sample = {prompt_idx}-{sample_idx}, event = {event_count}, bar = {bar_count}/{args.n_bar}")
         while bar_count < args.n_bar:
-            logit = model(tokens[-1024:].unsqueeze(0))[0][-1][-1][:282]
+            logit = model(tokens[-128:].unsqueeze(0))[0][-1][-1][:282]
             if tokens[-1] < 5:
                 mask = special_mask + pitch_mask + pitchDrum_mask + position_mask
             elif tokens[-1] < 93:
@@ -144,6 +145,7 @@ for prompt_idx, tokens in enumerate(tokens_set):
         h4 = compute_piece_pitch_entropy(seq, 4)
         gs = compute_piece_groove_similarity(seq)
         print(f"Result of {prompt_idx}-{sample_idx}: h4={h4}, gs={gs}")
+        print(f"Resent_running_avg: h4={h4_total/(sample_idx+1)}, gs={gs_total/(sample_idx+1)}")
         h4_total += h4
         gs_total += gs
     print(f"Result of prompt {prompt_idx}: h4={h4_total/args.sample}, gs={gs_total/args.sample}")
