@@ -11,14 +11,11 @@ from tqdm import tqdm
 import argparse
 from miditoolkit import MidiFile
 
-from musdr.side_utils import (
-#   get_event_seq, 
+from utils import (
   get_bars_crop, 
   get_pitch_histogram, 
   compute_histogram_entropy, 
   get_onset_xor_distance,
-  get_chord_sequence,
-  read_fitness_mat
 )
 
 #############################################################################
@@ -26,25 +23,13 @@ from musdr.side_utils import (
 Default event encodings (ones used by the Jazz Transformer).
 You may override the defaults in function arguments to suit your own vocabulary.
 '''
-BAR_EV = 0                  # the ID of ``Bar`` event
+BAR_EV = 1                  # the ID of ``Bar`` event
 POS_EVS = range(1, 17)      # the IDs of ``Position`` events
 PITCH_EVS = range(99, 185)  # the ID of Pitch => Note on events
 #############################################################################
 
-def parse_opt():
-    parser = argparse.ArgumentParser()
-    # training opts
-    parser.add_argument('--dict_path', type=str,
-                        help='the dictionary path', required=True)
-    parser.add_argument('--output_file_path', type=str,
-                        help='the output file path.', required=True)
-    args = parser.parse_args()
-    return args
-  
-opt = parse_opt()
 
-
-event2word, word2event = pickle.load(open(opt.dict_path, 'rb'))
+event2word, word2event = pickle.load(open("Huggingface/basic_event_dictionary.pkl", 'rb'))
 
 
 def extract_events(input_path):
@@ -138,6 +123,7 @@ def compute_piece_groove_similarity(piece_ev_seq, bar_ev_id=BAR_EV, pos_evs=POS_
 
   # get every single bar & compute indices of bar pairs
   n_bars = piece_ev_seq.count(bar_ev_id)
+  print(n_bars)
   bar_seqs = []
   for b in range(n_bars):
     bar_seqs.append( get_bars_crop(piece_ev_seq, b, b, bar_ev_id) )
